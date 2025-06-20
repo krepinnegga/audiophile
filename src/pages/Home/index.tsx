@@ -16,31 +16,29 @@ const Home = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className='relative w-full h-[729px] bg-foreground text-white overflow-hidden'>
-        {/* Responsive Background Images */}
-        <div className='absolute  md:inset-0'>
-          {/* Mobile Image (default) */}
-          <img
-            src={heroImageMobile}
-            alt='XX99 Mark II Headphones'
-            className='w-full h-[729px] object-cover opacity-90 md:hidden'
+      <section className='relative w-full bg-foreground text-white overflow-hidden'>
+        {/* Responsive Background Images using picture element */}
+        <picture className='absolute inset-0'>
+          {/* Mobile */}
+          <source media='(max-width: 767px)' srcSet={heroImageMobile} />
+          {/* Tablet */}
+          <source
+            media='(min-width: 768px) and (max-width: 1023px)'
+            srcSet={heroImageTablet}
           />
-          {/* Tablet Image */}
-          <img
-            src={heroImageTablet}
-            alt='XX99 Mark II Headphones'
-            className='hidden w-full h-[729px] object-cover opacity-90 md:block lg:hidden'
-          />
-          {/* Desktop Image */}
+          {/* Desktop */}
+          <source media='(min-width: 1024px)' srcSet={heroImageDesktop} />
+          {/* Fallback */}
           <img
             src={heroImageDesktop}
             alt='XX99 Mark II Headphones'
-            className='hidden w-full h-[729px] object-cover opacity-90 lg:block'
+            className='w-full h-full object-cover opacity-90'
+            loading='eager' // Hero image should load immediately
           />
-        </div>
+        </picture>
 
         {/* Content Container */}
-        <div className='relative max-w-7xl mx-auto px-6 py-48 lg:py-56'>
+        <div className='relative max-w-7xl mx-auto px-6 py-32 lg:py-48 min-h-[600px] md:min-h-[720px] flex items-center'>
           <div className='max-w-md md:max-w-lg lg:max-w-xl text-center md:text-left'>
             <span className='text-overline text-white/50 block mb-4'>
               NEW PRODUCT
@@ -61,8 +59,9 @@ const Home = () => {
         </div>
       </section>
 
-      <CategoryCards />
-
+      <div className='my-28'>
+        <CategoryCards />
+      </div>
       {/* ZX9 Speaker Section */}
       <section className='max-w-7xl mx-auto px-6 mb-12'>
         <div className='relative bg-primary rounded-lg overflow-hidden'>

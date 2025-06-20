@@ -4,38 +4,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
-import headphonesImage from '../../assets/shared/desktop/image-category-thumbnail-headphones.png';
-import speakersImage from '../../assets/shared/desktop/image-category-thumbnail-speakers.png';
-import earphonesImage from '../../assets/shared/desktop/image-category-thumbnail-earphones.png';
 import IconCashOnDelivery from '../../assets/checkout/icon-cash-on-delivery.svg';
 import OrderSuccessModal from '../../components/OrderSuccessModal';
+import { useCartStore } from '../../store/cartStore';
 
-const cartItems = [
-  {
-    id: 'xx99-mark-two-headphones',
-    name: 'XX99 MK II',
-    price: 2999,
-    quantity: 1,
-    image: headphonesImage,
-  },
-  {
-    id: 'xx59-headphones',
-    name: 'XX59',
-    price: 899,
-    quantity: 2,
-    image: speakersImage,
-  },
-  {
-    id: 'yx1-earphones',
-    name: 'YX1',
-    price: 599,
-    quantity: 1,
-    image: earphonesImage,
-  },
-];
-const SHIPPING = 50;
-const VAT = 1079;
-const GRAND_TOTAL = 5446;
+const SHIPPING_COST = 50;
 
 const schema = z
   .object({
@@ -47,8 +20,8 @@ const schema = z
     city: z.string().min(2, 'Required'),
     country: z.string().min(2, 'Required'),
     payment: z.enum(['e-Money', 'Cash on Delivery']),
-    eMoneyNumber: z.string().optional(),
-    eMoneyPin: z.string().optional(),
+    eMoneyNumber: z.string().min(4, 'Required').optional(),
+    eMoneyPin: z.string().min(2, 'Required').optional(),
   })
   .superRefine((data, ctx) => {
     if (data.payment === 'e-Money') {
@@ -74,6 +47,10 @@ type FormData = z.infer<typeof schema>;
 const Checkout = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { items, getTotal, getVat, getGrandTotal } = useCartStore();
+  const total = getTotal();
+  const vat = getVat();
+  const grandTotal = getGrandTotal();
   const {
     register,
     handleSubmit,
@@ -463,16 +440,16 @@ const Checkout = () => {
             <div className='bg-white rounded-lg p-6 md:p-8 flex flex-col gap-6 h-fit'>
               <h2 className='subtitle uppercase mb-4'>Summary</h2>
               <div className='flex flex-col gap-6'>
-                {cartItems.map(item => (
-                  <div key={item.id} className='flex  items-center gap-4'>
+                {items.map(item => (
+                  <div key={item.id} className='flex items-center gap-4'>
                     <img
-                      src={item.image}
+                      src={item.image.mobile}
                       alt={item.name}
-                      className='w-16 h-16 bg-gray-light rounded-lg'
+                      className='w-16 h-16 rounded-lg'
                     />
                     <div className='flex-1'>
                       <p className='font-bold text-black text-body'>
-                        {item.name}
+                        {item.name.replace(' Headphones', '')}
                       </p>
                       <p className='font-bold text-black/50 text-body'>
                         $ {item.price.toLocaleString()}
@@ -486,25 +463,22 @@ const Checkout = () => {
               </div>
               <div className='flex justify-between items-center mt-4'>
                 <p className='body text-black/50 uppercase'>Total</p>
-                <p className='h6 text-black'>
-                  ${' '}
-                  {cartItems
-                    .reduce((acc, item) => acc + item.price * item.quantity, 0)
-                    .toLocaleString()}
-                </p>
+                <p className='h6 text-black'>$ {total.toLocaleString()}</p>
               </div>
               <div className='flex justify-between items-center'>
                 <p className='body text-black/50 uppercase'>Shipping</p>
-                <p className='h6 text-black'>$ {SHIPPING.toLocaleString()}</p>
+                <p className='h6 text-black'>
+                  $ {SHIPPING_COST.toLocaleString()}
+                </p>
               </div>
               <div className='flex justify-between items-center'>
                 <p className='body text-black/50 uppercase'>VAT (Included)</p>
-                <p className='h6 text-black'>$ {VAT.toLocaleString()}</p>
+                <p className='h6 text-black'>$ {vat.toLocaleString()}</p>
               </div>
               <div className='flex justify-between items-center mb-4'>
                 <p className='body text-black/50 uppercase'>Grand Total</p>
                 <p className='h6 text-primary'>
-                  $ {GRAND_TOTAL.toLocaleString()}
+                  $ {grandTotal.toLocaleString()}
                 </p>
               </div>
               <button

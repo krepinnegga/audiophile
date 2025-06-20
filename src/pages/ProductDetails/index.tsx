@@ -5,6 +5,7 @@ import Layout from '../../components/Layout';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCartStore } from '../../store/cartStore';
 
 const ProductDetails = () => {
   const { slug } = useParams();
@@ -15,6 +16,13 @@ const ProductDetails = () => {
   }, [slug]);
 
   const [quantity, setQuantity] = useState(1);
+  const addItemToCart = useCartStore(state => state.addItem);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addItemToCart(product, quantity);
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -86,7 +94,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Content Container */}
-          <div className='flex-1 text-center md:text-left'>
+          <div className='flex-1 md:text-left'>
             {product.new && (
               <p className='text-overline text-primary mb-4'>NEW PRODUCT</p>
             )}
@@ -120,7 +128,9 @@ const ProductDetails = () => {
                 </button>
               </div>
               {/* Add to Cart Button */}
-              <button className='btn-1'>ADD TO CART</button>
+              <button className='btn-1' onClick={handleAddToCart}>
+                ADD TO CART
+              </button>
             </div>
           </div>
         </section>

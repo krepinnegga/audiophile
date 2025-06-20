@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '@/assets/shared/desktop/logo.svg';
-import Cart from '@/assets/shared/desktop/icon-cart.svg';
+import CartIcon from '@/assets/shared/desktop/icon-cart.svg';
 import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CartModal from './CartModal';
+import { useCartStore } from '../store/cartStore';
 
 const navLinks = [
   { name: 'HOME', to: '/' },
@@ -16,6 +17,7 @@ const Navbar = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const cartCount = useCartStore(state => state.getCartCount());
 
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -58,10 +60,15 @@ const Navbar = () => {
                 ))}
               </div>
               <button
-                className='flex items-center'
+                className='flex items-center relative'
                 onClick={() => setIsCartOpen(!isCartOpen)}
               >
-                <img src={Cart} alt='' className='h-6' />
+                <img src={CartIcon} alt='' className='h-6' />
+                {cartCount > 0 && (
+                  <span className='absolute -top-2 -right-3 bg-primary text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold'>
+                    {cartCount}
+                  </span>
+                )}
               </button>
             </div>
             <div className='w-full h-px bg-white opacity-20' />
@@ -89,10 +96,15 @@ const Navbar = () => {
             <div className='flex-grow'></div>
 
             <button
-              className='flex items-center'
+              className='flex items-center relative'
               onClick={() => setIsCartOpen(!isCartOpen)}
             >
-              <img src={Cart} alt='' className='h-6' />
+              <img src={CartIcon} alt='' className='h-6' />
+              {cartCount > 0 && (
+                <span className='absolute -top-2 -right-3 bg-primary text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold'>
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
 

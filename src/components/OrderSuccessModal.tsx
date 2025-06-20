@@ -1,39 +1,27 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import headphonesImage from '../assets/shared/desktop/image-category-thumbnail-headphones.png';
-import speakersImage from '../assets/shared/desktop/image-category-thumbnail-speakers.png';
-import earphonesImage from '../assets/shared/desktop/image-category-thumbnail-earphones.png';
 import ConfirmationIcon from '../assets/checkout/icon-order-confirmation.svg';
-
-const mockOrderItems = [
-  {
-    id: 'xx99-mark-two-headphones',
-    name: 'XX99 MK II',
-    price: 2999,
-    quantity: 1,
-    image: headphonesImage,
-  },
-  {
-    id: 'xx59-headphones',
-    name: 'XX59',
-    price: 899,
-    quantity: 2,
-    image: speakersImage,
-  },
-  {
-    id: 'yx1-earphones',
-    name: 'YX1',
-    price: 599,
-    quantity: 1,
-    image: earphonesImage,
-  },
-];
-const grandTotal = 5446;
+import { useCartStore } from '../store/cartStore';
+import { useNavigate } from 'react-router-dom';
 
 const OrderSuccessModal = () => {
   const [showAll, setShowAll] = useState(false);
-  const firstItem = mockOrderItems[0];
-  const otherCount = mockOrderItems.length - 1;
+  const { items, clearCart, getTotal, getCartCount } = useCartStore();
+  const navigate = useNavigate();
+
+  const total = getTotal();
+  const cartCount = getCartCount() - 1;
+
+  const firstItem = items[0];
+
+  const Image = new URL(
+    `../assets/product-${items[0].slug}/desktop/image-product.jpg`,
+    import.meta.url
+  ).href;
+
+  const handleBackToHome = () => {
+    clearCart();
+    navigate('/');
+  };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2'>
@@ -56,7 +44,7 @@ const OrderSuccessModal = () => {
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-4'>
                 <img
-                  src={firstItem.image}
+                  src={Image}
                   alt={firstItem.name}
                   className='w-12 h-12 rounded-lg'
                 />
@@ -76,40 +64,46 @@ const OrderSuccessModal = () => {
 
             {showAll && (
               <>
-                {mockOrderItems.slice(1).map(item => (
-                  <div key={item.id} className='mt-4 pt-4'>
-                    <div className='flex items-center justify-between'>
-                      <div className='flex items-center gap-4'>
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className='w-12 h-12 rounded-lg'
-                        />
-                        <div>
-                          <p className='font-bold text-black text-body'>
-                            {item.name}
-                          </p>
-                          <p className='font-bold text-black/50 text-body'>
-                            $ {item.price.toLocaleString()}
-                          </p>
+                {items.slice(1).map(item => {
+                  const Image = new URL(
+                    `../assets/product-${item.slug}/desktop/image-product.jpg`,
+                    import.meta.url
+                  ).href;
+                  return (
+                    <div key={item.id} className='mt-4 pt-4'>
+                      <div className='flex items-center justify-between'>
+                        <div className='flex items-center gap-4'>
+                          <img
+                            src={Image}
+                            alt={item.name}
+                            className='w-12 h-12 rounded-lg'
+                          />
+                          <div>
+                            <p className='font-bold text-black text-body'>
+                              {item.name}
+                            </p>
+                            <p className='font-bold text-black/50 text-body'>
+                              $ {item.price.toLocaleString()}
+                            </p>
+                          </div>
                         </div>
+                        <span className='text-black/50 font-bold'>
+                          x{item.quantity}
+                        </span>
                       </div>
-                      <span className='text-black/50 font-bold'>
-                        x{item.quantity}
-                      </span>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </>
             )}
 
-            {otherCount > 0 && (
+            {cartCount > 0 && (
               <div className='flex  border-t border-black/10 justify-center mt-4'>
                 <button
                   className='body text-black/50  text-center'
                   onClick={() => setShowAll(v => !v)}
                 >
-                  {showAll ? 'View less' : `and ${otherCount} other item(s)`}
+                  {showAll ? 'View less' : `and ${cartCount} other item(s)`}
                 </button>
               </div>
             )}
@@ -117,14 +111,17 @@ const OrderSuccessModal = () => {
 
           <div className='bg-black p-6 flex flex-col justify-center min-w-[180px] md:min-w-[220px]'>
             <p className='body text-white/50 uppercase mb-2'>GRAND TOTAL</p>
-            <p className='h6 text-white'>$ {grandTotal.toLocaleString()}</p>
+            <p className='h6 text-white'>$ {total.toLocaleString()}</p>
           </div>
         </div>
 
         <div className='w-full'>
-          <Link to='/' className='btn-1 w-full text-center block'>
+          <button
+            onClick={handleBackToHome}
+            className='btn-1 w-full text-center block'
+          >
             BACK TO HOME
-          </Link>
+          </button>
         </div>
       </div>
     </div>

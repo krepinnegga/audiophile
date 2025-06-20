@@ -20,8 +20,8 @@ const schema = z
     city: z.string().min(2, 'Required'),
     country: z.string().min(2, 'Required'),
     payment: z.enum(['e-Money', 'Cash on Delivery']),
-    eMoneyNumber: z.string().min(4, 'Required').optional(),
-    eMoneyPin: z.string().min(2, 'Required').optional(),
+    eMoneyNumber: z.string().optional(),
+    eMoneyPin: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.payment === 'e-Money') {

@@ -440,26 +440,32 @@ const Checkout = () => {
             <div className='bg-white rounded-lg p-6 md:p-8 flex flex-col gap-6 h-fit'>
               <h2 className='subtitle uppercase mb-4'>Summary</h2>
               <div className='flex flex-col gap-6'>
-                {items.map(item => (
-                  <div key={item.id} className='flex items-center gap-4'>
-                    <img
-                      src={item.image.mobile}
-                      alt={item.name}
-                      className='w-16 h-16 rounded-lg'
-                    />
-                    <div className='flex-1'>
-                      <p className='font-bold text-black text-body'>
-                        {item.name.replace(' Headphones', '')}
-                      </p>
-                      <p className='font-bold text-black/50 text-body'>
-                        $ {item.price.toLocaleString()}
-                      </p>
+                {items.map(item => {
+                  const Image = new URL(
+                    `../../assets/product-${item.slug}/desktop/image-product.jpg`,
+                    import.meta.url
+                  ).href;
+                  return (
+                    <div key={item.id} className='flex items-center gap-4'>
+                      <img
+                        src={Image}
+                        alt={item.name}
+                        className='w-16 h-16 rounded-lg'
+                      />
+                      <div className='flex-1'>
+                        <p className='font-bold text-black text-body'>
+                          {item.name.replace(' Headphones', '')}
+                        </p>
+                        <p className='font-bold text-black/50 text-body'>
+                          $ {item.price.toLocaleString()}
+                        </p>
+                      </div>
+                      <span className='text-black/50 font-bold'>
+                        x{item.quantity}
+                      </span>
                     </div>
-                    <span className='text-black/50 font-bold'>
-                      x{item.quantity}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className='flex justify-between items-center mt-4'>
                 <p className='body text-black/50 uppercase'>Total</p>

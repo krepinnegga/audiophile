@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
-import speaker from '../assets/product-zx9-speaker/desktop/image-product.jpg';
 
 interface CartModalProps {
   onClose: () => void;

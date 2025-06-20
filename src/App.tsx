@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import ErrorPage from './pages/Error';
 import Category from './pages/Category';
 import Checkout from './pages/Checkout';
+import ProductDetails from './pages/ProductDetails';
 
 function App() {
   const router = createBrowserRouter([
@@ -27,6 +28,11 @@ function App() {
     {
       path: '/checkout',
       element: <Checkout />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/product/:slug',
+      element: <ProductDetails />,
       errorElement: <ErrorPage />,
     },
   ]);

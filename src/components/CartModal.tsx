@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import headphonesImage from '../assets/shared/desktop/image-category-thumbnail-headphones.png';
 import speakersImage from '../assets/shared/desktop/image-category-thumbnail-speakers.png';
 import earphonesImage from '../assets/shared/desktop/image-category-thumbnail-earphones.png';
+import { useState } from 'react';
 
 const mockCartItems = [
   {
@@ -38,6 +39,7 @@ interface CartModalProps {
 }
 
 const CartModal = ({ onClose }: CartModalProps) => {
+  const [quantity, setQuantity] = useState(1);
   return (
     <>
       {/* Overlay */}
@@ -83,13 +85,17 @@ const CartModal = ({ onClose }: CartModalProps) => {
                   </div>
                 </div>
                 <div className='bg-gray-light flex items-center justify-between w-24 p-2 text-center'>
-                  <button className='text-black/50 hover:text-primary px-2'>
+                  <button
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    className='text-black/50 hover:text-primary px-2'
+                  >
                     -
                   </button>
-                  <span className='text-black text-subtitle'>
-                    {item.quantity}
-                  </span>
-                  <button className='text-black/50 hover:text-primary px-2'>
+                  <span className='text-black text-subtitle'>{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(q => q + 1)}
+                    className='text-black/50 hover:text-primary px-2'
+                  >
                     +
                   </button>
                 </div>

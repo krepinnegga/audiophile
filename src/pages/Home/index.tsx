@@ -11,6 +11,7 @@ import ZX7SpeakerDesktop from '../../assets/home/desktop/image-speaker-zx7.jpg';
 import EarPhonesDesktop from '../../assets/home/desktop/image-earphones-yx1.jpg';
 import EarPhonesTablet from '../../assets/home/tablet/image-earphones-yx1.jpg';
 import EarPhonesMobile from '../../assets/home/mobile/image-earphones-yx1.jpg';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
@@ -33,7 +34,7 @@ const Home = () => {
             src={heroImageDesktop}
             alt='XX99 Mark II Headphones'
             className='w-full h-full object-cover opacity-90'
-            loading='eager' // Hero image should load immediately
+            loading='eager'
           />
         </picture>
 
@@ -52,9 +53,12 @@ const Home = () => {
               Experience natural, lifelike audio and exceptional build quality
               made for the passionate music enthusiast.
             </p>
-            <button className='bg-primary hover:bg-primary-light text-white font-bold py-3 px-8 uppercase text-subtitle tracking-wider transition-colors'>
+            <Link
+              to='/product/xx99-mark-two-headphones'
+              className='bg-primary hover:bg-primary-light text-white font-bold py-3 px-8 uppercase text-subtitle tracking-wider transition-colors'
+            >
               SEE PRODUCT
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -91,9 +95,12 @@ const Home = () => {
                 Upgrade to premium speakers that are phenomenally built to
                 deliver truly remarkable sound.
               </p>
-              <button className='bg-black-pure hover:bg-gray-800 text-white font-bold py-3 px-8 uppercase text-subtitle tracking-wider transition-colors'>
+              <Link
+                to='/product/zx9-speaker'
+                className='bg-black-pure hover:bg-gray-800 text-white font-bold py-3 px-8 uppercase text-subtitle tracking-wider transition-colors'
+              >
                 SEE PRODUCT
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -126,7 +133,9 @@ const Home = () => {
               <h2 className='text-3xl md:text-4xl font-bold uppercase mb-8 text-black'>
                 ZX7 SPEAKER
               </h2>
-              <button className='btn-2'>SEE PRODUCT</button>
+              <Link to='/product/zx7-speaker' className='btn-2'>
+                SEE PRODUCT
+              </Link>
             </div>
           </div>
         </div>
@@ -161,7 +170,9 @@ const Home = () => {
             <h2 className='text-3xl md:text-4xl font-bold uppercase mb-8 text-black'>
               YX1 EARPHONES
             </h2>
-            <button className='btn-2'>SEE PRODUCT</button>
+            <Link to='/product/yx1-earphones' className='btn-2'>
+              SEE PRODUCT
+            </Link>
           </div>
         </div>
       </section>

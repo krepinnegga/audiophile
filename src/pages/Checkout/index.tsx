@@ -3,7 +3,7 @@ import Layout from '../../components/Layout';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import headphonesImage from '../../assets/shared/desktop/image-category-thumbnail-headphones.png';
 import speakersImage from '../../assets/shared/desktop/image-category-thumbnail-speakers.png';
 import earphonesImage from '../../assets/shared/desktop/image-category-thumbnail-earphones.png';
@@ -73,7 +73,7 @@ type FormData = z.infer<typeof schema>;
 
 const Checkout = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -99,16 +99,20 @@ const Checkout = () => {
     setValue('payment', value, { shouldValidate: true });
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Layout showAbout={false}>
       <div className='my-40 mx-4 px-2 md:px-6 lg:px-0'>
         <div className='max-w-7xl mx-auto'>
-          <Link
-            to='/'
-            className='body text-black/50 hover:text-primary mb-6 inline-block hover:underline'
+          <button
+            onClick={handleGoBack}
+            className='body text-black/50 mb-8 hover:text-primary transition-colors'
           >
             Go Back
-          </Link>
+          </button>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className='grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12'

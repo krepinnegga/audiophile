@@ -4,7 +4,7 @@ import products from '../../constants/data.json';
 import type { Product } from '../../types';
 import { CategoryCards } from '../../components/CategoryCard';
 import { ProductCard } from '../../components/ProductCard';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 type CategoryParams = {
   category?: string;
@@ -12,6 +12,13 @@ type CategoryParams = {
 
 const Category = () => {
   const { category } = useParams<CategoryParams>();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, [category]);
 
   const [categoryProducts, sortedProducts] = useMemo(() => {
     const filtered = products.filter(
